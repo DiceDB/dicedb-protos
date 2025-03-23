@@ -7,6 +7,7 @@ option go_package = "./wire";
 message Command {
     string cmd = 1;
     repeated string args = 2;
+    string corr_id = 3;
 }
 
 message Response {
@@ -21,4 +22,5 @@ message Response {
     google.protobuf.Struct attrs = 7;
     repeated google.protobuf.Value v_list = 8;
     map<string, string> v_ss_map = 9;
+    string corr_id = 10;
 }
