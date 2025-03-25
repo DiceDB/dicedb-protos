@@ -17,6 +17,7 @@ message Response {
         string v_str = 4;
         double v_float = 5;
         bytes v_bytes = 6;
+        repeated string v_slice = 7;
     }
     google.protobuf.Struct attrs = 7;
     repeated google.protobuf.Value v_list = 8;
