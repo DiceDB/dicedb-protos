@@ -9,16 +9,65 @@ message Command {
     repeated string args = 2;
 }
 
-message Response {
-    string err = 1;
+message NilValue {
+    bool v_nil = 1;
+}
+
+message IntValue {
+    int64 v_int = 1;
+}
+
+message StringValue {
+    string v_str = 1;
+}
+
+message FloatValue {
+    double v_float = 1;
+}
+
+message BytesValue {
+    bytes v_bytes = 1;
+}
+
+message ValueList {
+    repeated google.protobuf.Value v_list = 1;
+}
+
+message StringStringMap {
+    map<string, string> v_ss_map = 1;
+}
+
+message Attributes {
+    google.protobuf.Struct attrs = 1;
+}
+
+enum StatusCode {
+    OK = 0;
+    INVALID_COMMAND = 1;
+    INVALID_ARGUMENTS = 2;
+    NOT_FOUND = 3;
+}
+
+message Status {
+    bool success = 1;
+    StatusCode status_code = 2;
+    string error = 3;
+}
+
+message ResponseValue {
     oneof value {
-        bool v_nil = 2;
-        int64 v_int = 3;
-        string v_str = 4;
-        double v_float = 5;
-        bytes v_bytes = 6;
+        NilValue v_nil = 1;
+        IntValue v_int = 2;
+        StringValue v_str = 3;
+        FloatValue v_float = 4;
+        BytesValue v_bytes = 5;
+        ValueList v_list = 6;
+        Attributes attrs = 7;
+        StringStringMap v_ss_map = 8;
     }
-    google.protobuf.Struct attrs = 7;
-    repeated google.protobuf.Value v_list = 8;
-    map<string, string> v_ss_map = 9;
+}
+
+message Response {
+    Status status = 1;
+    ResponseValue res_val = 2;
 }
