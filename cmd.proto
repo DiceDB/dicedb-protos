@@ -2,42 +2,8 @@ syntax = "proto3";
 
 package wire;
 import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
 option go_package = "./wire";
-
-
-enum StatusCode {
-    OK = 0;
-    INVALID_COMMAND = 1;
-    INVALID_ARGUMENTS = 2;
-    NOT_FOUND = 3;
-}
-
-message Status {
-    bool success = 1;
-    StatusCode status_code = 2;
-    string error = 3;
-}
-
-// Primitive responses
-message NilValue {
-    bool v_nil = 1;
-}
-
-message IntValue {
-    int64 v_int = 1;
-}
-
-message StringValue {
-    string v_str = 1;
-}
-
-message FloatValue {
-    double v_float = 1;
-}
-
-message BytesValue {
-    bytes v_bytes = 1;
-}
 
 message ValueList {
     repeated google.protobuf.Value v_list = 1;
@@ -51,85 +17,56 @@ message Attributes {
     google.protobuf.Struct attrs = 1;
 }
 
+message StringSlice {
+    repeated string v_list = 1;
+}
+
+enum ObjectType {
+    DATA_TYPE_UNSPECIFIED = 0;
+    STRING = 1;
+    JSON = 2;
+    BYTES = 3;
+    INT = 4;
+    SET = 5;
+    STRING_STRING_MAP = 6;
+    SORTED_SET = 7;
+    COUNT_MIN_SKETCH = 8;
+    BLOOM_FILTER = 9;
+    DEQUEUE = 10;
+    HYPER_LOG_LOG = 11;
+    FLOAT = 12;
+}
+
+enum ExpireStatus {
+    NOT_FOUND = 0;
+    EXPIRED = 1;
+    NOT_EXPIRED = 2;
+}
+
 // Command responses
 message Command {
     string cmd = 1;
     repeated string args = 2;
 }
 
-message DECRResponse {
-    oneof result {
-        bool v_nil = 1;
-        int64 v_int = 2;
-    }
-}
-
-message DECRBYResponse {
-    oneof result {
-        bool v_nil = 1;
-        int64 v_int = 2;
-    }
-}
-
-message DELResponse {
-    oneof result {
-        bool v_nil = 1;
-        int64 v_int = 2;
-    }
-}
-
-message ECHOResponse {
+message Message {
     oneof result {
         bool v_nil = 1;
         string v_str = 2;
     }
 }
 
-message EXISTSResponse {
-    oneof result {
-        bool v_nil = 1;
-        int64 v_int = 2;
-    }
+message MessageWatch {
+    Message result = 1;
+    Attributes v_attrs = 2;
 }
 
-message EXPIREResponse {
-    oneof result {
-        bool v_nil = 1;
-        int64 v_int = 2;
-    }
+message ValueWatch {
+    Value result = 1;
+    Attributes v_attrs = 2;
 }
 
-message EXPIREATResponse {
-    oneof result {
-        bool v_nil = 1;
-        int64 v_int = 2;
-    }
-}
-
-message EXPIRETIMEResponse {
-    oneof result {
-        bool v_nil = 1;
-        int64 v_int = 2;
-    }
-}
-
-message FLUSHDBResponse {
-    oneof result {
-        string v_str = 1;
-    }
-}
-
-message GETWATCHResponse {
-    oneof result {
-        bool v_nil = 1;
-        int64 v_int = 2;
-        string v_str = 3;
-        bytes v_bytes = 4;
-        Attributes v_attrs = 5;
-    }
-}
-
-message GETResponse {
+message Value {
     oneof result {
         bool v_nil = 1;
         int64 v_int = 2;
@@ -138,69 +75,16 @@ message GETResponse {
     }
 }
 
-message GETDELResponse {
-    oneof result {
-        bool v_nil = 1;
-        int64 v_int = 2;
-        string v_str = 3;
-        bytes v_bytes = 4;
-    }
-}
-
-message GETEXResponse {
-    oneof result {
-        bool v_nil = 1;
-        int64 v_int = 2;
-        string v_str = 3;
-        bytes v_bytes = 4;
-    }
-}
-
-message GETSETResponse {
-    oneof result {
-        bool v_nil = 1;
-        int64 v_int = 2;
-        string v_str = 3;
-        bytes v_bytes = 4;
-    }
-}
-
-message HGETResponse {
-    oneof result {
-        bool v_nil = 1;
-        string v_str = 2;
-    }
-}
-
-message HGETWATCHResponse {
-    oneof result {
-        bool v_nil = 1;
-        string v_str = 2;
-        StringStringMap v_ss_map = 3;
-    }
-}
-
-message HGETALLResponse {
+message FieldValueMap {
     oneof result {
         bool v_nil = 1;
         StringStringMap v_ss_map = 2;
     }
 }
 
-message HGETALLWATCHResponse {
-    oneof result {
-        bool v_nil = 1;
-        StringStringMap v_ss_map = 2;
-    }
-}
-
-message HANDSHAKEResponse {
-    oneof result {
-        bool v_nil = 1;
-        int64 v_int = 2;
-        string v_str = 3;
-        bytes v_bytes = 4;
-    }
+message FieldValueMapWatch {
+    FieldValueMap result = 1;
+    Attributes v_attrs = 2;
 }
 
 message HSETResponse {
@@ -210,59 +94,31 @@ message HSETResponse {
     }
 }
 
-message INCRResponse {
+message Counter {
     oneof result {
         bool v_nil = 1;
-        int64 v_int = 2;
-    }
-}
-
-message INCRBYResponse {
-    oneof result {
-        bool v_nil = 1;
-        int64 v_int = 2;
+        int64 counter = 2;
     }
 }
 
 message KEYSResponse {
     oneof result {
         bool v_nil = 1;
-        google.protobuf.Value v_list = 2;
+        StringSlice matching_keys = 2;
     }
 }
 
-message PINGResponse {
+message ExpiryDetails {
     oneof result {
-        bool v_nil = 1;
-        string v_str = 2;
-    }
-}
-
-message SETResponse {
-    oneof result {
-        bool v_nil = 1;
-        string v_str = 2;
-    }
-}
-
-message TTLResponse {
-    oneof result {
-        bool v_nil = 1;
-        int64 v_int = 2;
+        ExpireStatus status = 1;
+        google.protobuf.Timestamp expiry_time = 2;
     }
 }
 
 message TYPEResponse {
     oneof result {
-        bool v_nil = 1;
-        string v_str = 2;
-    }
-}
-
-message UNWATCHResponse {
-    oneof result {
-        bool v_nil = 1;
-        string v_str = 2;
+        bool status = 1;
+        ObjectType object_type = 2;
     }
 }
 
@@ -274,64 +130,73 @@ message ZADDResponse {
     }
 }
 
-message ZPOPMAXResponse {
+message ZPOPResponse {
     oneof result {
-        NilValue v_nil = 1;
-        google.protobuf.Value v_list = 2;
+        bool has_key = 1;
+        SortedSetMemberSlice popped_members = 2;
     }
 }
 
-message ZPOPMINResponse {
-    oneof result {
-        NilValue v_nil = 1;
-        google.protobuf.Value v_list = 2;
+message SortedSetMemberSlice {
+    repeated SortedSetMember slice = 1;
+}
+
+message SortedSetMember {
+    string member_name = 1;
+    string score = 2;
+}
+
+message Element {
+    oneof element {
+        string v_str = 1;
+        bytes v_bytes = 2;
+    }
+    oneof score {
+        int64 v_int = 3;
+        double v_float = 4;
     }
 }
 
 message ZRANKResponse {
     oneof result {
-        bool v_nil = 1;
+        bool value_exists = 1;
         int64 rank = 2;
     }
     optional double score = 3;
 }
 
-message ResponseValue {
-    oneof command_response {
-        DECRResponse decr = 1;
-        DECRBYResponse decr_by = 2;
-        DELResponse del = 3;
-        ECHOResponse echo = 4;
-        EXISTSResponse exists = 5;
-        EXPIREResponse expire = 6;
-        EXPIREATResponse expire_at = 7;
-        FLUSHDBResponse flushdb = 8;
-        GETWATCHResponse get_watch = 9;
-        GETResponse get = 10;
-        GETDELResponse get_del = 11;
-        GETEXResponse get_ex = 12;
-        GETSETResponse get_set = 13;
-        HANDSHAKEResponse handshake = 14;
-        HGETResponse hget = 15;
-        HGETALLWATCHResponse hget_all_watch = 16;
-        HGETALLResponse hget_all = 17;
-        HSETResponse hset = 18;
-        INCRResponse incr = 19;
-        INCRBYResponse incr_by = 20;
-        KEYSResponse keys = 21;
-        PINGResponse ping = 22;
-        SETResponse set = 23;
-        TTLResponse ttl = 24;
-        TYPEResponse type = 25;
-        UNWATCHResponse unwatch = 26;
-        ZADDResponse zadd = 27;
-        ZPOPMAXResponse zpopmax = 28;
-        ZPOPMINResponse zpopmin = 29;
-        ZRANKResponse zrank = 30;
-    }
-}
-
 message Response {
-    Status status = 1;
-    repeated ResponseValue res_val = 2;
+    oneof command_response {
+        Counter decr = 1;
+        Counter decr_by = 2;
+        Counter del = 3;
+        Message echo = 4;
+        Counter exists = 5;
+        bool expire = 6;
+        bool expire_at = 7;
+        bool flushdb = 8;
+        ValueWatch get_watch = 9;
+        Value get = 10;
+        Value get_del = 11;
+        Value get_ex = 12;
+        Value get_set = 13;
+        bool handshake = 14;
+        Message hget = 15;
+        MessageWatch hget_watch = 16;
+        FieldValueMap hget_all = 17;
+        FieldValueMapWatch hget_all_watch = 18;
+        Counter hset = 19;
+        Counter incr = 20;
+        Counter incr_by = 21;
+        StringSlice keys = 22;
+        Message ping = 23;
+        Value set = 24;
+        ExpiryDetails ttl = 25;
+        TYPEResponse type = 26;
+        bool unwatch = 27;
+        ZADDResponse zadd = 28; // verify
+        ZPOPResponse zpopmax = 29;
+        ZPOPResponse zpopmin = 30;
+        ZRANKResponse zrank = 31;
+    }
 }
