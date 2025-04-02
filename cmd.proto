@@ -13,12 +13,19 @@ message StringStringMap {
     map<string, string> v_ss_map = 1;
 }
 
-message Attributes {
+message WatchAttributes {
     google.protobuf.Struct attrs = 1;
 }
 
 message StringSlice {
     repeated string v_list = 1;
+}
+
+message StringList {
+    oneof result {
+        bool v_nil = 1;
+        StringList v_slice = 2;
+    }
 }
 
 enum ObjectType {
@@ -58,12 +65,12 @@ message Message {
 
 message MessageWatch {
     Message result = 1;
-    Attributes v_attrs = 2;
+    WatchAttributes v_attrs = 2;
 }
 
 message ValueWatch {
     Value result = 1;
-    Attributes v_attrs = 2;
+    WatchAttributes v_attrs = 2;
 }
 
 message Value {
@@ -84,27 +91,13 @@ message FieldValueMap {
 
 message FieldValueMapWatch {
     FieldValueMap result = 1;
-    Attributes v_attrs = 2;
-}
-
-message HSETResponse {
-    oneof result {
-        bool v_nil = 1;
-        int64 v_int = 2;
-    }
+    WatchAttributes v_attrs = 2;
 }
 
 message Counter {
     oneof result {
         bool v_nil = 1;
         int64 counter = 2;
-    }
-}
-
-message KEYSResponse {
-    oneof result {
-        bool v_nil = 1;
-        StringSlice matching_keys = 2;
     }
 }
 
@@ -115,49 +108,14 @@ message ExpiryDetails {
     }
 }
 
-message TYPEResponse {
+message ValueType {
     oneof result {
-        bool status = 1;
+        bool v_nil = 1;
         ObjectType object_type = 2;
     }
 }
 
-message ZADDResponse {
-    oneof result {
-        bool v_nil = 1;
-        int64 v_int = 2;
-        string v_str = 3;
-    }
-}
-
-message ZPOPResponse {
-    oneof result {
-        bool has_key = 1;
-        SortedSetMemberSlice popped_members = 2;
-    }
-}
-
-message SortedSetMemberSlice {
-    repeated SortedSetMember slice = 1;
-}
-
-message SortedSetMember {
-    string member_name = 1;
-    string score = 2;
-}
-
-message Element {
-    oneof element {
-        string v_str = 1;
-        bytes v_bytes = 2;
-    }
-    oneof score {
-        int64 v_int = 3;
-        double v_float = 4;
-    }
-}
-
-message ZRANKResponse {
+message RankScore {
     oneof result {
         bool value_exists = 1;
         int64 rank = 2;
@@ -167,36 +125,36 @@ message ZRANKResponse {
 
 message Response {
     oneof command_response {
-        Counter decr = 1;
-        Counter decr_by = 2;
-        Counter del = 3;
-        Message echo = 4;
-        Counter exists = 5;
-        bool expire = 6;
-        bool expire_at = 7;
-        bool flushdb = 8;
+        bool flushdb = 1;
+        Message echo = 2;
+        bool unwatch = 3;
+        Value set = 4;
+        Value get = 5;
+        Value get_del = 6;
+        Value get_ex = 7;
+        Value get_set = 8;
         ValueWatch get_watch = 9;
-        Value get = 10;
-        Value get_del = 11;
-        Value get_ex = 12;
-        Value get_set = 13;
-        bool handshake = 14;
-        Message hget = 15;
-        MessageWatch hget_watch = 16;
-        FieldValueMap hget_all = 17;
-        FieldValueMapWatch hget_all_watch = 18;
-        Counter hset = 19;
-        Counter incr = 20;
-        Counter incr_by = 21;
-        StringSlice keys = 22;
-        Message ping = 23;
-        Value set = 24;
-        ExpiryDetails ttl = 25;
-        TYPEResponse type = 26;
-        bool unwatch = 27;
-        ZADDResponse zadd = 28; // verify
-        ZPOPResponse zpopmax = 29;
-        ZPOPResponse zpopmin = 30;
-        ZRANKResponse zrank = 31;
+        Counter exists = 10;
+        Counter del = 11;
+        Counter incr = 12;
+        Counter incr_by = 13;
+        Counter decr = 14;
+        Counter decr_by = 15;
+        StringList keys = 16;
+        ValueType type = 17;
+        Message ping = 18;
+        bool handshake = 19;
+        Message hget = 20;
+        MessageWatch hget_watch = 21;
+        FieldValueMap hget_all = 22;
+        FieldValueMapWatch hget_all_watch = 23;
+        Counter hset = 24;
+        bool expire = 25;
+        bool expire_at = 26;
+        ExpiryDetails ttl = 27;
+        Value zadd = 28;
+        StringList zpopmax = 29;
+        StringList zpopmin = 30;
+        RankScore zrank = 31;        
     }
 }
