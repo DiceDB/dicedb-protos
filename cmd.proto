@@ -5,35 +5,13 @@ import "google/protobuf/struct.proto";
 option go_package = "./wire";
 
 
-enum StatusCode {
-    OK = 0;
-    INVALID_COMMAND = 1;
-    INVALID_ARGUMENTS = 2;
-    NOT_FOUND = 3;
-}
-
-message Status {
-    bool success = 1;
-    StatusCode status_code = 2;
-    string error = 3;
-}
-
-message ValueList {
-    repeated google.protobuf.Value v_list = 1;
+message Command {
+    string cmd = 1;
+    repeated string args = 2;
 }
 
 message StringStringMap {
     map<string, string> v_ss_map = 1;
-}
-
-message Attributes {
-    
-}
-
-// Command responses
-message Command {
-    string cmd = 1;
-    repeated string args = 2;
 }
 
 message DECRRes {
@@ -275,7 +253,7 @@ message ZRANKRes {
     optional double score = 3;
 }
 
-message ResponseValue {
+message Res {
     oneof command_res {
         DECRRes decr = 1;
         DECRBYRes decr_by = 2;
@@ -308,9 +286,4 @@ message ResponseValue {
         ZPOPMINRes zpopmin = 29;
         ZRANKRes zrank = 30;
     }
-}
-
-message Res {
-    Status status = 1;
-    repeated ResponseValue res_val = 2;
 }
