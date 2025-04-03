@@ -9,16 +9,280 @@ message Command {
     repeated string args = 2;
 }
 
-message Response {
-    string err = 1;
-    oneof value {
-        bool v_nil = 2;
-        int64 v_int = 3;
-        string v_str = 4;
-        double v_float = 5;
-        bytes v_bytes = 6;
+message StringStringMap {
+    map<string, string> v_ss_map = 1;
+}
+
+message DECRRes {
+    oneof result {
+        bool v_nil = 1;
+        int64 v_int = 2;
     }
-    google.protobuf.Struct attrs = 7;
-    repeated google.protobuf.Value v_list = 8;
-    map<string, string> v_ss_map = 9;
+}
+
+message DECRBYRes {
+    oneof result {
+        bool v_nil = 1;
+        int64 v_int = 2;
+    }
+}
+
+message DELRes {
+    oneof result {
+        bool v_nil = 1;
+        int64 v_int = 2;
+    }
+}
+
+message ECHORes {
+    oneof result {
+        bool v_nil = 1;
+        string v_str = 2;
+    }
+}
+
+message EXISTSRes {
+    oneof result {
+        bool v_nil = 1;
+        int64 v_int = 2;
+    }
+}
+
+message EXPIRERes {
+    oneof result {
+        bool v_nil = 1;
+        int64 v_int = 2;
+    }
+}
+
+message EXPIREATRes {
+    oneof result {
+        bool v_nil = 1;
+        int64 v_int = 2;
+    }
+}
+
+message EXPIRETIMERes {
+    oneof result {
+        bool v_nil = 1;
+        int64 v_int = 2;
+    }
+}
+
+message FLUSHDBRes {
+    oneof result {
+        string v_str = 1;
+    }
+}
+
+message GETWATCHRes {
+    oneof result {
+        bool v_nil = 1;
+        int64 v_int = 2;
+        string v_str = 3;
+        bytes v_bytes = 4;
+        google.protobuf.Struct attrs = 5;
+    }
+}
+
+message GETRes {
+    oneof result {
+        bool v_nil = 1;
+        int64 v_int = 2;
+        string v_str = 3;
+        bytes v_bytes = 4;
+    }
+}
+
+message GETDELRes {
+    oneof result {
+        bool v_nil = 1;
+        int64 v_int = 2;
+        string v_str = 3;
+        bytes v_bytes = 4;
+    }
+}
+
+message GETEXRes {
+    oneof result {
+        bool v_nil = 1;
+        int64 v_int = 2;
+        string v_str = 3;
+        bytes v_bytes = 4;
+    }
+}
+
+message GETSETRes {
+    oneof result {
+        bool v_nil = 1;
+        int64 v_int = 2;
+        string v_str = 3;
+        bytes v_bytes = 4;
+    }
+}
+
+message HGETRes {
+    oneof result {
+        bool v_nil = 1;
+        string v_str = 2;
+    }
+}
+
+message HGETWATCHRes {
+    oneof result {
+        bool v_nil = 1;
+        string v_str = 2;
+        StringStringMap v_ss_map = 3;
+    }
+}
+
+message HGETALLRes {
+    oneof result {
+        bool v_nil = 1;
+        StringStringMap v_ss_map = 2;
+    }
+}
+
+message HGETALLWATCHRes {
+    oneof result {
+        bool v_nil = 1;
+        StringStringMap v_ss_map = 2;
+    }
+}
+
+message HANDSHAKERes {
+    oneof result {
+        bool v_nil = 1;
+        int64 v_int = 2;
+        string v_str = 3;
+        bytes v_bytes = 4;
+    }
+}
+
+message HSETRes {
+    oneof result {
+        bool v_nil = 1;
+        int64 v_int = 2;
+    }
+}
+
+message INCRRes {
+    oneof result {
+        bool v_nil = 1;
+        int64 v_int = 2;
+    }
+}
+
+message INCRBYRes {
+    oneof result {
+        bool v_nil = 1;
+        int64 v_int = 2;
+    }
+}
+
+message KEYSRes {
+    oneof result {
+        bool v_nil = 1;
+        google.protobuf.Value v_list = 2;
+    }
+}
+
+message PINGRes {
+    oneof result {
+        bool v_nil = 1;
+        string v_str = 2;
+    }
+}
+
+message SETRes {
+    oneof result {
+        bool v_nil = 1;
+        string v_str = 2;
+    }
+}
+
+message TTLRes {
+    oneof result {
+        bool v_nil = 1;
+        int64 v_int = 2;
+    }
+}
+
+message TYPERes {
+    oneof result {
+        bool v_nil = 1;
+        string v_str = 2;
+    }
+}
+
+message UNWATCHRes {
+    oneof result {
+        bool v_nil = 1;
+        string v_str = 2;
+    }
+}
+
+message ZADDRes {
+    oneof result {
+        bool v_nil = 1;
+        int64 v_int = 2;
+        string v_str = 3;
+    }
+}
+
+message ZPOPMAXRes {
+    oneof result {
+        bool v_nil = 1;
+        google.protobuf.Value v_list = 2;
+    }
+}
+
+message ZPOPMINRes {
+    oneof result {
+        bool v_nil = 1;
+        google.protobuf.Value v_list = 2;
+    }
+}
+
+message ZRANKRes {
+    oneof result {
+        bool v_nil = 1;
+        int64 rank = 2;
+    }
+    optional double score = 3;
+}
+
+message Res {
+    oneof command_res {
+        DECRRes decr = 1;
+        DECRBYRes decr_by = 2;
+        DELRes del = 3;
+        ECHORes echo = 4;
+        EXISTSRes exists = 5;
+        EXPIRERes expire = 6;
+        EXPIREATRes expire_at = 7;
+        FLUSHDBRes flushdb = 8;
+        GETWATCHRes get_watch = 9;
+        GETRes get = 10;
+        GETDELRes get_del = 11;
+        GETEXRes get_ex = 12;
+        GETSETRes get_set = 13;
+        HANDSHAKERes handshake = 14;
+        HGETRes hget = 15;
+        HGETALLWATCHRes hget_all_watch = 16;
+        HGETALLRes hget_all = 17;
+        HSETRes hset = 18;
+        INCRRes incr = 19;
+        INCRBYRes incr_by = 20;
+        KEYSRes keys = 21;
+        PINGRes ping = 22;
+        SETRes set = 23;
+        TTLRes ttl = 24;
+        TYPERes type = 25;
+        UNWATCHRes unwatch = 26;
+        ZADDRes zadd = 27;
+        ZPOPMAXRes zpopmax = 28;
+        ZPOPMINRes zpopmin = 29;
+        ZRANKRes zrank = 30;
+    }
 }
