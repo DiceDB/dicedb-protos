@@ -236,7 +236,6 @@ message GEOElement {
     GEOCoordinates coordinates = 2;
     double distance = 3;
     uint64 hash = 4;
-    int64 rank = 5;
 }
 
 message GEOSEARCHRes {
