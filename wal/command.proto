@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package wal;
 
-option go_package = "github.com/dicedb/dice/internal/wal";
+option go_package = "./wal";
 
 // CommandPayload represents the payload for command entries in WAL
 message Command {
