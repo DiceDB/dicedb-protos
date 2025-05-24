@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package wal;
+
+option go_package = "github.com/dicedb/dice/internal/wal";
+
+// CommandPayload represents the payload for command entries in WAL
+message Command {
+  // Log Sequence Number
+  uint64 lsn = 1;
+  // The wire command bytes
+  bytes payload = 2;
+} 
