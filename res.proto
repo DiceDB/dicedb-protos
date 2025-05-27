@@ -56,6 +56,8 @@ message Result {
         GEOADDRes GEOADDRes = 51;
         GEODISTRes GEODISTRes = 52;
         GEOSEARCHRes GEOSEARCHRes = 53;
+        GEOHASHRes GEOHASHRes = 54;
+        GEOPOSRes GEOPOSRes = 55;
     }
 }
 
@@ -240,4 +242,12 @@ message GEOElement {
 
 message GEOSEARCHRes {
     repeated GEOElement elements = 1;
+}
+
+message GEOHASHRes {
+    repeated string hashes = 1;
+}
+
+message GEOPOSRes {
+    repeated GEOCoordinates coordinates = 1;
 }
