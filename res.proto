@@ -8,10 +8,15 @@ enum Status {
     ERR = 1;
 }
 
+message Metadata {
+    bool isWatchable = 1;           // Unix timestamp when response was generated
+}
+
 message Result {
     Status status = 1;
     string message = 2;
     uint64 fingerprint64 = 3;
+    optional Metadata metadata = 4;         // Added metadata field
     oneof response {
         TYPERes TYPERes = 11;
         PINGRes PINGRes = 12;
@@ -214,4 +219,4 @@ message ZCOUNTWATCHRes {
 }
 
 message ZCARDWATCHRes {
-}
+} 
