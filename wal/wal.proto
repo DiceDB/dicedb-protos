@@ -1,16 +1,24 @@
 syntax = "proto3";
 
 package wal;
+
 option go_package = "./wal";
 
-enum ElementType {
-  ELEMENT_TYPE_NOOP = 0;
-  ELEMENT_TYPE_COMMAND = 1;
+// EntryType defines the type of WAL entry
+enum WALEntryType {
+  WAL_ENTRY_TYPE_COMMAND = 0;
 }
 
-message Element {
-  uint64 lsn = 1;
-  int64 timestamp = 2;
-  ElementType element_type = 3;
-  bytes payload = 4;
-}
+// WALEntry represents a single entry in the Write-Ahead Log
+message WALEntry {
+  // CRC32 checksum of the entry data
+  uint32 crc32 = 1;
+  // Size of the WAL entry in bytes
+  uint32 size = 2;
+  // The actual WAL payload
+  bytes payload = 3;
+  // Timestamp when the entry was created
+  int64 timestamp = 4;
+  // Type of the entry
+  WALEntryType entry_type = 5;
+} 
